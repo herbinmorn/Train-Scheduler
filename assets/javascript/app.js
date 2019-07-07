@@ -15,3 +15,25 @@ $(document).ready(function() {
     firebase.initializeApp(firebaseConfig);
     var database = firebase.database();
 
+    $('#submit-btn').on('click',function(event){
+        event.preventDefault();
+        var dataInputs = {
+            trainName:$('#trainName').val(),
+            destination:$('#destination').val(),  
+            firstTrainTime:$('#firstTrainTime').val(),
+            frequency:$('#frequency').val()
+        };
+        database.ref().push(dataInputs);
+    });
+   
+    function displayFirebaseValues(){
+        database.ref().on('child_added',function(snapshot){
+            $('#show-firebase-info').append(
+               '<tr>' + '<td>' + snapshot.val().trainName + '</td>' + '<td>'+ snapshot.val().destination +'</td>'+ '<td>'+ snapshot.val().firstTrainTime +'</td>'+ '<td>'+ snapshot.val().frequency +'</td>'+ '</tr>'
+            );
+        
+        });
+    }
+
+    displayFirebaseValues();
+});
